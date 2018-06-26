@@ -6,7 +6,7 @@ shift
 [ "$1" = "usage" ] && {
   echo "  Remind:"
   echo "    $TODO_SH remind ITEM# DATE TIME"
-  echo "      create a reminder out of the todo item an alert time"
+  echo "      create a reminder out of the todo item with an alert time"
   echo ""
   exit
 }
