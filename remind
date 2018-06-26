@@ -15,6 +15,8 @@ getTodo "$1"
 alert_date=$(date -j -f "%Y-%m-%d" "+%m/%d/%Y" "$2")
 alert_time=$(date -j -f "%H:%M" "+%I:%M%p" "$3")
 
+$TODO_SH append "$1" "#reminded"
+
 osascript - "$todo" "$alert_date" "$alert_time" <<END
 on run argv
     set stringedAll to date (item 2 of argv & " " & item 3 of argv)
