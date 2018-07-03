@@ -17,9 +17,7 @@ case "$1" in
 	alert_date=$(date -j -f "%Y-%m-%d" "+%m/%d/%Y" "$2")
 	alert_time=$(date -j -f "%H:%M" "+%I:%M%p" "$3") 
 
-$TODO_SH append "$1" "#reminded"
-
-osascript - "$todo" "$alert_date" "$alert_time" <<END
+rawReminderID=$(osascript - "$todo" "$alert_date" "$alert_time" <<END
 on run argv
     set stringedAll to date (item 2 of argv & " " & item 3 of argv)
     tell application "Reminders"
@@ -28,7 +26,9 @@ on run argv
 	end tell
     end tell
 end run
-END
+END)
+reminderID=$(echo "$rawReminderID" | sed "s_\(reminder id x-apple-reminder://\)\(.*\)_\2_")
+	$TODO_SH append "$1" "reminder:$reminderID"
 ;;
 *)
 	echo "Usage: $TODO_SH remind ITEM# DATE TIME"
