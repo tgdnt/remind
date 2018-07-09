@@ -17,17 +17,7 @@ case "$1" in
 	alert_date=$(date -j -f "%Y-%m-%d" "+%m/%d/%Y" "$2")
 	alert_time=$(date -j -f "%H:%M" "+%I:%M%p" "$3") 
 
-rawReminderID=$(osascript - "$todo" "$alert_date" "$alert_time" <<END
-on run argv
-    set stringedAll to date (item 2 of argv & " " & item 3 of argv)
-    tell application "Reminders"
-	tell list "Reminders" of default account
-		make new reminder with properties {name:item 1 of argv, remind me date:stringedAll}
-	end tell
-    end tell
-end run
-END)
-reminderID=$(echo "$rawReminderID" | sed "s_\(reminder id x-apple-reminder://\)\(.*\)_\2_")
+	reminderID=$(osascript -e "tell application \"Reminders\" to tell list \"$REMINDERS_LIST\" of default account to make new reminder with properties {name:\"$todo\", remind me date:date (\"$alert_date $alert_time\")}" | sed "s_\(reminder id x-apple-reminder://\)\(.*\)_\2_")
 	$TODO_SH append "$1" "reminder:$reminderID"
 ;;
 *)
